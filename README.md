@@ -18,7 +18,7 @@ If that's all fine, you can proceed to review and copy/paste the code in the nex
 
 ## Code
 
-### #set up your console and creats the dataset `$DATASET`
+### #set up your console and creats the dataset `$DATASET`.
 ```
 export PROJECT=my-project
 export DATASET=my_dataset
@@ -26,6 +26,10 @@ export TABLE=my_gff
 
 #create the dataset
 bq --project=$PROJECT mk $DATASET
+```
+
+### #convert the example volvox.gff GFF file into [JSONL](http://jsonlines.org/) format.
+```
 ```
 
 ### #load the data into a new table `$TABLE` using the schema defined in the [`gff-schema.json`](gff-schema.json) schema.
