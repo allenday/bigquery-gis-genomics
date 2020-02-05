@@ -1,0 +1,71 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "seq",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "source",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "type",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "location",
+    "type": "RECORD",
+    "fields": [
+      {
+        "mode": "NULLABLE",
+        "name": "start",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "end",
+        "type": "INTEGER"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "range",
+        "type": "GEOGRAPHY"
+      },     
+    ]
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "score",
+    "type": "NUMERIC"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "strand",
+    "type": "BOOLEAN"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "phase",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "attributes",
+    "type": "RECORD",
+    "fields": [
+      {
+        "mode": "NULLABLE",
+        "name": "tag",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "value",
+        "type": "STRING"
+      }
+    ]
+  }
+]
