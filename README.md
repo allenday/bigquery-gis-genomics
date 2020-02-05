@@ -17,14 +17,19 @@ and that you:
 If that's all fine, you can proceed to review and copy/paste the code in the next section. Otherwise, edit it to your liking :)
 
 ## Code
-~~~
+
+### #this block sets up your console and creates the dataset $DATASET
+```
 export PROJECT=my-project
 export DATASET=my_dataset
 export TABLE=my_gff
 
 #create the dataset
 bq --project=$PROJECT mk $DATASET
+```
 
-#[the schema](gff-schema.json)
+### #this block loads the data into the new table $TABLE using the schema defined in the [gff-schema.json](gff-schema.json) schema.
+
+```
 bq --project=$PROJECT $DATASET.$TABLE gs://mybucket/info.csv ./gff-schema.json
 ```
