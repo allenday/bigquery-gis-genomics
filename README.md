@@ -67,3 +67,16 @@ reference_bases,alternate_bases,names,quality,filter,call
 FROM `$PROJECT:$DATASET.$TABLE`
 ```
 
+#### # 2. query to join GFF schema and VCF schema tables, we'll use the [`genomics_cannabis`](https://console.cloud.google.com/bigquery?p=bigquery-public-data&d=genomics_cannabis&page=dataset) dataset as an example.
+```
+SELECT
+  var.reference_bases, var.alternate_bases, 
+  gff.geometry AS gff_geometry, var.geometry AS var_geometry,
+  gff.seq_id, gff.source, gff.type, gff.attributes, gff.id, 
+FROM
+  `bigquery-public-data.genomics_cannabis.cs10_gff` AS gff,
+  `bigquery-public-data.genomics_cannabis.cs10_var` AS var
+WHERE TRUE
+  AND ST_INTERSECTS(gff.geometry,var.geometry)
+  AND gff.type = 'CDS'
+```
