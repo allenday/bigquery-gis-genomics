@@ -69,14 +69,36 @@ FROM `$PROJECT:$DATASET.$TABLE`
 
 #### # 2. query to join GFF schema and VCF schema tables, we'll use the [`genomics_cannabis`](https://console.cloud.google.com/bigquery?p=bigquery-public-data&d=genomics_cannabis&page=dataset) dataset as an example.
 ```
+WITH win AS (
+  SELECT
+    reference_name AS ref,
+    CAST(FLOOR(start_position / 10000) AS INT64) AS win10k,
+    geometry,
+    call.name AS sample_id
+  FROM
+    `bigquery-public-data.genomics_cannabis.cs10_var` AS var JOIN UNNEST(call) AS call
+  WHERE
+    --samples that are not homozygous reference
+    call.genotype[SAFE_ORDINAL(1)] > 0 OR (call.genotype[SAFE_ORDINAL(2)] IS NOT NULL AND call.genotype[SAFE_ORDINAL(2)] > 0)
+)
+
 SELECT
-  var.reference_bases, var.alternate_bases, 
-  gff.geometry AS gff_geometry, var.geometry AS var_geometry,
-  gff.seq_id, gff.source, gff.type, gff.attributes, gff.id, 
-FROM
-  `bigquery-public-data.genomics_cannabis.cs10_gff` AS gff,
-  `bigquery-public-data.genomics_cannabis.cs10_var` AS var
+  win.ref AS chrom,
+  win10k,
+  COUNT(win.sample_id)/10000 AS cds_variant_density
+FROM 
+  win,
+  `bigquery-public-data.genomics_cannabis.cs10_gff` AS gff
 WHERE TRUE
-  AND ST_INTERSECTS(gff.geometry,var.geometry)
+  AND gff.seq_id = win.ref
+  AND ST_INTERSECTS(gff.geometry,win.geometry)
   AND gff.type = 'CDS'
+  AND gff.seq_id = 'chr1'
+GROUP BY
+  chrom,
+  win10k
+ORDER BY
+   chrom,
+   win10k,
+   cds_variant_density DESC  
 ```
