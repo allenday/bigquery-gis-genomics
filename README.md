@@ -6,8 +6,9 @@ Use BigQuery geospatial operators to work with genomic data
 This tutorial assumes that you:
 
 1. **already** installed the GCP SDK (or are using the cloud console)
-2. **already** enabled all necessary APIs.
-3. **already** created a GCP project called `my-project`
+2. **already** installed `node` and `npm`
+3. **already** enabled all necessary APIs.
+4. **already** created a GCP project called `my-project`
 
 and that you:
 
@@ -17,6 +18,11 @@ and that you:
 If that's all fine, you can proceed to review and copy/paste the code in the next section. Otherwise, edit it to your liking :)
 
 ## Code
+
+### #install node package [`@gmod/gff`](https://github.com/GMOD/gff-js) to download and process a GFF file
+```
+npm install @gmod/gff
+```
 
 ### #set up your console and creats the dataset `$DATASET`.
 ```
