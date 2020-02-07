@@ -21,25 +21,18 @@
   },
   {
     "mode": "NULLABLE",
-    "name": "location",
-    "type": "RECORD",
-    "fields": [
-      {
-        "mode": "NULLABLE",
-        "name": "start",
-        "type": "FLOAT"
-      },
-      {
-        "mode": "NULLABLE",
-        "name": "end",
-        "type": "FLOAT"
-      },
-      {
-        "mode": "NULLABLE",
-        "name": "geometry",
-        "type": "GEOGRAPHY"
-      }
-    ]
+    "name": "start",
+    "type": "FLOAT"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "end",
+    "type": "FLOAT"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "geometry",
+    "type": "GEOGRAPHY"
   },
   {
     "mode": "NULLABLE",
@@ -112,7 +105,7 @@
         "type": "BOOLEAN"
       },
       {
-        "mode": "NULLABLE",
+        "mode": "REPEATED",
         "name": "vendor",
         "type": "RECORD",
         "fields": [
