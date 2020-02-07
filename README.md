@@ -49,7 +49,21 @@ gsutil cp input.jsonl gs://$BUCKET/
 ```
 
 ### #load the data into a new table `$TABLE` using the schema defined in the [`gff-schema.json`](gff-schema.json) schema.
-
 ```
 bq --project=$PROJECT $DATASET.$TABLE gs://$BUCKET/input.jsonl ./gff-schema.json
 ```
+
+## # Query the table
+```
+```
+
+### # Extra stuff
+#### # 1. query to convert variant schema to use the GEOGRAPHY type
+```
+SELECT 
+reference_name,start_position,end_position,
+ST_MAKELINE(ST_GEOGPOINT(start_position/POWER(10,7),0),ST_GEOGPOINT(end_position/POWER(10,7),0)) AS geometry,
+reference_bases,alternate_bases,names,quality,filter,call
+FROM `$PROJECT:$DATASET.$TABLE`
+```
+
