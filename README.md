@@ -9,6 +9,7 @@ This tutorial assumes that you:
 2. **already** installed `node` and `npm`
 3. **already** enabled all necessary APIs.
 4. **already** created a GCP project called `my-project`
+5. **already** created a GCS bucket named `my-gff-bucket`
 
 and that you:
 
@@ -19,30 +20,36 @@ If that's all fine, you can proceed to review and copy/paste the code in the nex
 
 ## Code
 
-### #install node package [`@gmod/gff`](https://github.com/GMOD/gff-js) to download and process a GFF file
+### #install node package [`@gmod/gff`](https://github.com/GMOD/gff-js) to download a genome annotation file
 ```
 npm install @gmod/gff
 curl -O ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/626/175/GCF_900626175.1_cs10/GCF_900626175.1_cs10_genomic.gff.gz
-gzip -dc GCF_900626175.1_cs10_genomic.gff.gz > input.gff
-node --max-old-space-size=8192 parse-gff.js  > input.jsonl
 ```
 
 ### #set up your console and creats the dataset `$DATASET`.
 ```
 export PROJECT=my-project
 export DATASET=my_dataset
+export BUCKET=my-gff-bucket
 export TABLE=my_gff
 
 #create the dataset
 bq --project=$PROJECT mk $DATASET
 ```
 
-### #convert the example volvox.gff GFF file into [JSONL](http://jsonlines.org/) format.
+### #convert the [GFF](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md)-formatted file into [JSONL](http://jsonlines.org/) format.
 ```
+gzip -dc GCF_900626175.1_cs10_genomic.gff.gz > input.gff
+node --max-old-space-size=8192 parse-gff.js  > input.jsonl
+```
+
+### #upload the JSONL file to Google Cloud Storage
+```
+gsutil cp input.jsonl gs://$BUCKET/
 ```
 
 ### #load the data into a new table `$TABLE` using the schema defined in the [`gff-schema.json`](gff-schema.json) schema.
 
 ```
-bq --project=$PROJECT $DATASET.$TABLE gs://mybucket/info.csv ./gff-schema.json
+bq --project=$PROJECT $DATASET.$TABLE gs://$BUCKET/input.jsonl ./gff-schema.json
 ```
