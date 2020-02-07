@@ -102,3 +102,23 @@ ORDER BY
    win10k,
    cds_variant_density DESC  
 ```
+
+#### # 3. count the number of strains that differ from reference at each position that overlaps a CDS
+```
+SELECT  
+  gff.seq_id AS chrom,gff.start,gff.end,gff.type,COUNT(call.name)
+FROM 
+  `bigquery-public-data.genomics_cannabis.cs10_gff` AS gff,
+  `bigquery-public-data.genomics_cannabis.cs10_var` AS var JOIN UNNEST(call) AS call
+WHERE TRUE
+  --samples that are not homozygous reference
+  AND call.genotype[SAFE_ORDINAL(1)] > 0 OR (call.genotype[SAFE_ORDINAL(2)] IS NOT NULL AND call.genotype[SAFE_ORDINAL(2)] > 0)
+  AND gff.seq_id = var.reference_name
+  AND ST_INTERSECTS(gff.geometry,var.geometry)
+  AND gff.type = 'CDS'
+GROUP BY
+  chrom,gff.start,gff.end,gff.type
+ORDER BY
+   chrom,
+   gff.start
+```
