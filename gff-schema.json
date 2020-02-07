@@ -1,7 +1,12 @@
 [
   {
     "mode": "NULLABLE",
-    "name": "seq",
+    "name": "id",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "seq_id",
     "type": "STRING"
   },
   {
@@ -22,29 +27,29 @@
       {
         "mode": "NULLABLE",
         "name": "start",
-        "type": "INTEGER"
+        "type": "FLOAT"
       },
       {
         "mode": "NULLABLE",
         "name": "end",
-        "type": "INTEGER"
+        "type": "FLOAT"
       },
       {
         "mode": "NULLABLE",
-        "name": "range",
+        "name": "geometry",
         "type": "GEOGRAPHY"
-      },     
+      }
     ]
   },
   {
     "mode": "NULLABLE",
     "name": "score",
-    "type": "NUMERIC"
+    "type": "STRING"
   },
   {
     "mode": "NULLABLE",
     "name": "strand",
-    "type": "BOOLEAN"
+    "type": "STRING"
   },
   {
     "mode": "NULLABLE",
@@ -52,20 +57,87 @@
     "type": "INTEGER"
   },
   {
-    "mode": "REPEATED",
+    "mode": "NULLABLE",
     "name": "attributes",
     "type": "RECORD",
     "fields": [
       {
-        "mode": "NULLABLE",
-        "name": "tag",
+        "mode": "REPEATED",
+        "name": "ID",
         "type": "STRING"
       },
       {
         "mode": "REPEATED",
-        "name": "value",
+        "name": "Name",
         "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "Alias",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "Parent",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "Target",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "Gap",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "Derives_from",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "Note",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "Dbxref",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "Ontology_term",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "vendor",
+        "type": "RECORD",
+        "fields": [
+          {
+            "mode": "NULLABLE",
+            "name": "key",
+            "type": "STRING"
+          },
+          {
+            "mode": "REPEATED",
+            "name": "value",
+            "type": "STRING"
+          }
+        ]
       }
     ]
+  },
+  {
+    "mode": "REPEATED",
+    "name": "derived_features",
+    "type": "STRING"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "child_features",
+    "type": "STRING"
   }
 ]
