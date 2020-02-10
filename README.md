@@ -103,7 +103,8 @@ ORDER BY
    cds_variant_density DESC  
 ```
 
-#### # 3. count the number of strains that differ from reference at each position that overlaps a CDS
+#### # 3. count the number of strains that differ from reference at each position that overlaps a CDS. 
+#this query is inspirced by [@deflaux](https://github.com/deflaux)'s [variant hotspots(https://github.com/googlegenomics/bigquery-examples/blob/master/1000genomes/sql/variant-hotspots.sql) query.
 ```
 SELECT  
   gff.seq_id AS chrom,gff.start,gff.end,gff.type,COUNT(call.name)
@@ -122,3 +123,28 @@ ORDER BY
    chrom,
    gff.start
 ```
+
+#### # 4. create a partitioned and clustered table
+```
+--first run this manually, as a table scan is not permitted in a PARTITION declartion
+--SELECT MAX(k) FROM (SELECT ROW_NUMBER() OVER() AS k,x.z FROM (SELECT seq_id AS z FROM `bigquery-public-data.genomics_cannabis.cs10_gff` GROUP BY z ORDER BY seq_id) AS x) AS x
+
+CREATE TABLE `cannabis-3k.geo_experiment.cs10_gff_refpart`
+PARTITION BY RANGE_BUCKET(_part, GENERATE_ARRAY(0, 221, 1))
+CLUSTER BY geometry
+
+AS
+
+SELECT gff.*,refpart.k AS _part
+FROM
+  (
+    SELECT ROW_NUMBER() OVER() AS k,x.seq_id
+    FROM (SELECT seq_id FROM `bigquery-public-data.genomics_cannabis.cs10_gff` AS gff GROUP BY seq_id ORDER BY seq_id) AS x
+    ORDER BY seq_id
+  ) AS refpart,
+  `bigquery-public-data.genomics_cannabis.cs10_gff` AS gff
+WHERE
+  refpart.seq_id = gff.seq_id
+
+```
+
